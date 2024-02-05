@@ -1,12 +1,18 @@
 /* eslint-disable no-undef */
 require('dotenv').config();
-const chai = require('chai');
-const chaihttp = require('chai-http');
-const app = require('../index');
+// const chai = require('chai');
+// const chaihttp = require('chai-http');
+// const app = require('../server');
+
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import app from '../server';
+import { logger1 as logger } from '../utils/db/connection';
+
 const mongoose = require('mongoose');
 
 chai.should();
-chai.use(chaihttp);
+chai.use(chaiHttp);
 
 describe('Access to DB', function () {
     describe('#pass', function () {
@@ -19,7 +25,7 @@ describe('Access to DB', function () {
                 .then(() => {
                     logger.info('MongoDB testing connected Successfully');
                 })
-                .catch((err) => {
+                .catch((err: any) => {
                     logger.error(err.message);
                 });
             done();
@@ -38,7 +44,7 @@ describe('Auth Api', () => {
                     password: 'Umair@786786',
                     country: 'india',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     response.body.should.be.a('object');
                     response.body.should.have.property('newUser');
                     response.body.should.have.property('qrCodeUrl');
@@ -53,7 +59,7 @@ describe('Auth Api', () => {
                         password: 'Umair@786786',
                         country: 'india',
                     })
-                    .end((error, response) => {
+                    .end((error: any, response: any) => {
                         response.body.should.be.a('object');
                         response.body.should.have
                             .property('error')
@@ -71,7 +77,7 @@ describe('Auth Api', () => {
                     email: 'afsarshaikh87@gmail.com',
                     password: 'Umair@786786',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     //
                     //response.body.should.have.statusCode(200);
                     response.body.should.be.a('object');
@@ -88,7 +94,7 @@ describe('Auth Api', () => {
                     email: 'afsarshaikh87@gmail.com',
                     password: 'armaan@7861',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     response.body.should.be.a('object');
                     response.body.should.have
                         .property('error')
@@ -105,7 +111,7 @@ describe('Auth Api', () => {
                     email: 'afsarshaikh87@gmail.com',
                     mfaToken: '123456',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     //response.body.should.have.statusCode(200);
                     response.body.should.be.a('object');
                     response.body.should.have
@@ -123,7 +129,7 @@ describe('Auth Api', () => {
                 .send({
                     email: 'afsarshaikh87@gmail.com',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     //response.body.should.have.statusCode(200);
                     response.body.should.be.a('object');
                     response.body.should.have
@@ -142,7 +148,7 @@ describe('Auth Api', () => {
                     password: 'aaaaaaaaaaaa',
                     confirmPassword: 'aaaaaaaaaaaa',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     //response.body.should.have.statusCode(200);
                     response.body.should.be.a('object');
                     response.body.should.have
@@ -157,9 +163,9 @@ describe('Auth Api', () => {
             chai.request(app)
                 .post('/verify-google-token')
                 .send({
-                    token: '1111111111111111111111111111edddddd'
+                    token: '1111111111111111111111111111edddddd',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     //response.body.should.have.statusCode(200);
                     response.body.should.be.a('object');
                     response.body.should.have

@@ -91,3 +91,9 @@ let PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     logger.info('Server Connected', PORT);
 });
+
+
+// Add this at the end of your server.ts file
+// module.exports = app; // For CommonJS
+// or
+export default app; // For ES Modules, if you're using ES6+ syntax

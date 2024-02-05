@@ -6,8 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["express,jsonwebtoken"]
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "mocha", "express", "jsonwebtoken"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules"]
 }

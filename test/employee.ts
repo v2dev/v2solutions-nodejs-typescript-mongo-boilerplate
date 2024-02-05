@@ -1,12 +1,14 @@
 /* eslint-disable no-undef */
-const chai = require('chai');
-const chaihttp = require('chai-http');
-const app = require('../index');
+
+
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import app from '../server';
 
 chai.should();
-chai.use(chaihttp);
+chai.use(chaiHttp);
 
-let id;
+let id: string;
 // please enter JWT token here.
 let token =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFmc2Fyc2hhaWtoODdAZ21haWwuY29tIiwiaWF0IjoxNzAxODQ1NDk4LCJleHAiOjE3MDE4NDY2OTh9.kNqf3C9UB6nEakk48Oeb2ZhHv-nfmIcA9_ZD9Xd6lOw';
@@ -15,7 +17,7 @@ describe('Employee Crud', () => {
     describe('Add Employee', () => {
         it('Add new employee', (done) => {
             chai.request(app)
-                .post('/employee/add')
+                .post('/employees')
                 .set('Authorization', token)
                 .send({
                     name: 'Afsar Shaikh',
@@ -24,7 +26,7 @@ describe('Employee Crud', () => {
                     designation: 'Senior Software Engineer',
                     education: 'BE',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     id = response.body.newEmployee._id;
                     response.body.should.be.a('object');
                     response.body.should.have.property('newEmployee');
@@ -36,7 +38,7 @@ describe('Employee Crud', () => {
     describe('Get Employee', () => {
         it('fetch all employee list', (done) => {
             chai.request(app)
-                .get('/employee/get')
+                .get('/employees')
                 .set('Authorization', token)
                 .query({
                     sortedColumn: 'education',
@@ -44,7 +46,7 @@ describe('Employee Crud', () => {
                     page: 1,
                     sort: 'asc',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     response.body.should.be.a('object');
                     response.body.should.have.property('employees');
                     response.body.should.have.property('page');
@@ -59,12 +61,12 @@ describe('Employee Crud', () => {
     describe('Update Employee', () => {
         it('Update employee data', (done) => {
             chai.request(app)
-                .put(`/employee/update/${id}`)
+                .put(`/employees/${id}`)
                 .set('Authorization', token)
                 .send({
                     name: 'Afsar Shaikh 111',
                 })
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     response.body.should.be.a('object');
                     response.body.should.have
                         .property('message')
@@ -76,9 +78,9 @@ describe('Employee Crud', () => {
     describe('Delete Employee', () => {
         it('delete employee by id', (done) => {
             chai.request(app)
-                .delete(`/employee/delete/${id}`)
+                .delete(`/employees/${id}`)
                 .set('Authorization', token)
-                .end((error, response) => {
+                .end((error: any, response: any) => {
                     response.body.should.be.a('object');
                     response.body.should.have
                         .property('message')

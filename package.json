@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npx eslint .",
     "start": "nodemon server.ts",
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 10000 --require ts-node/register 'test/**/*.ts'",
     "build": "tsc tsconfig.json"
   },
   "author": "",
@@ -44,7 +44,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.14",
+    "@types/node": "^20.11.16",
     "@types/qrcode": "^1.5.5",
     "@types/speakeasy": "^2.0.10",
     "@types/uuid": "^9.0.8",

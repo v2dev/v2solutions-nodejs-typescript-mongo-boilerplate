@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 require('dotenv').config();
 const mongoose = require('mongoose');
-const logger1 = require('../../logger/bunyanLogger.ts').child({
+export const logger1 = require('../../logger/bunyanLogger.ts').child({
     module: 'NodeJS boilerplate accelerator',
 });
 
