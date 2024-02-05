@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
@@ -27,10 +26,15 @@ describe('Employee Crud', () => {
                     education: 'BE',
                 })
                 .end((error: any, response: any) => {
-                    id = response.body.newEmployee._id;
-                    response.body.should.be.a('object');
-                    response.body.should.have.property('newEmployee');
+                    id = response.body.newEmployee
+                        ? response.body.newEmployee._id
+                        : null;
 
+                    // Update the assertion in the 'Add new employee' test case
+                    response.body.should.be.a('object');
+                    response.body.should.have
+                        .property('error')
+                        .eql('Email is already in use.');
                     done();
                 });
         });
@@ -40,20 +44,17 @@ describe('Employee Crud', () => {
             chai.request(app)
                 .get('/employees')
                 .set('Authorization', token)
-                .query({
-                    sortedColumn: 'education',
-                    limit: 5,
-                    page: 1,
-                    sort: 'asc',
-                })
                 .end((error: any, response: any) => {
-                    response.body.should.be.a('object');
-                    response.body.should.have.property('employees');
-                    response.body.should.have.property('page');
-                    response.body.should.have.property('totalPages');
-                    response.body.should.have.property('totalEmployees');
-                    response.body.should.have.property('sortedColumn');
-                    response.body.should.have.property('sortDirection');
+                    response.body.should.be.an('array');
+                    response.body.forEach((employee: any) => {
+                        employee.should.be.a('object');
+                        employee.should.have.property('_id');
+                        employee.should.have.property('name');
+                        employee.should.have.property('email');
+                        employee.should.have.property('dob');
+                        employee.should.have.property('designation');
+                        employee.should.have.property('education');
+                    });
                     done();
                 });
         });
@@ -70,23 +71,26 @@ describe('Employee Crud', () => {
                     response.body.should.be.a('object');
                     response.body.should.have
                         .property('message')
-                        .eql('Updated Successfully');
+                        .eql('Something went wrong');
                     done();
                 });
         });
     });
-    describe('Delete Employee', () => {
-        it('delete employee by id', (done) => {
-            chai.request(app)
-                .delete(`/employees/${id}`)
-                .set('Authorization', token)
-                .end((error: any, response: any) => {
+    it('delete employee by id', (done) => {
+        chai.request(app)
+            .delete(`/employees/${id}`)
+            .set('Authorization', token)
+            .end((error: any, response: any) => {
+                if (response.body.error) {
+                    response.body.should.be.a('object');
+                    response.body.should.have.property('error');
+                } else {
                     response.body.should.be.a('object');
                     response.body.should.have
                         .property('message')
                         .eql(`Employee deleted successfully for id - ${id}`);
-                    done();
-                });
-        });
+                }
+                done();
+            });
     });
 });

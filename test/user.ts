@@ -35,38 +35,48 @@ describe('Access to DB', function () {
 
 describe('Auth Api', () => {
     describe('Sign up', () => {
-        it('It should register the user', (done) => {
+        it('It should register the user with a unique email', (done) => {
+            // Generating a unique email using current timestamp
+            const uniqueEmail = `testuser+${Date.now()}@example.com`;
             chai.request(app)
                 .post('/signup')
                 .send({
-                    name: 'Afsar Shaikh',
-                    email: 'afsarshaikh87@gmail.com',
-                    password: 'Umair@786786',
-                    country: 'india',
+                    name: 'Test User',
+                    email: uniqueEmail, // Using the unique email
+                    password: 'TestPassword123',
+                    country: 'TestCountry',
                 })
-                .end((error: any, response: any) => {
+                .end((error, response) => {
+                    response.should.have.status(200); // Assuming 200 is the success status code
                     response.body.should.be.a('object');
                     response.body.should.have.property('newUser');
-                    response.body.should.have.property('qrCodeUrl');
+                    response.body.newUser.should.have
+                        .property('email')
+                        .eql(uniqueEmail);
+                    response.body.should.have.property('qrCodeUrl'); // Assuming a QR code URL is expected in the response
                     done();
                 });
-            it('It should not register the user when email already exist in system', (done) => {
-                chai.request(app)
-                    .post('/signup')
-                    .send({
-                        name: 'Afsar Shaikh',
-                        email: 'afsarshaikh87@gmail.com',
-                        password: 'Umair@786786',
-                        country: 'india',
-                    })
-                    .end((error: any, response: any) => {
-                        response.body.should.be.a('object');
-                        response.body.should.have
-                            .property('error')
-                            .eql('Email is already register');
-                        done();
-                    });
-            });
+        });
+
+        it('It should not register the user when email already exists', (done) => {
+            // Using a fixed email to simulate an attempt to register with an already existing email
+            const email = 'existinguser@example.com';
+            chai.request(app)
+                .post('/signup')
+                .send({
+                    name: 'Existing User',
+                    email: email, // Using the fixed email
+                    password: 'ExistingPassword123',
+                    country: 'ExistingCountry',
+                })
+                .end((error, response) => {
+                    response.should.have.status(422); // Assuming 400 is the error status code for existing email
+                    response.body.should.be.a('object');
+                    response.body.should.have
+                        .property('error')
+                        .eql('Email is already in use.');
+                    done();
+                });
         });
     });
     describe('Sign In', () => {
