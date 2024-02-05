@@ -1,0 +1,36 @@
+
+image: docker:19.03.12
+services:
+  - docker:19.03.12-dind
+stages:
+  - build
+  - test
+  - deploy
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - node_modules/
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run type:check
+test:
+  stage: test
+  needs:
+    - build
+  script: npm run test
+deploy_to_aws:
+  stage: deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+  needs:
+    - build
+    - test
+  script:
+    - echo $AWS_ACCESS_KEY_ID
+    - npm install -g serverless
+    - sls deploy --stage prod

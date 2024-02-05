@@ -1,0 +1,13 @@
+version: "1.0"
+
+services:
+  app:
+    container_name: afsar786786/backend
+    image: afsar786786/backend
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/
+    ports:
+      - 3000:3000
