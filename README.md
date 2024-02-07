@@ -25,7 +25,7 @@ The Employee List project is a Node.js-based API allowing users to perform CRUD 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/afsarahmad0786786/v2solutions_backend_boilerplate.git
+    git clone https://github.com/v2dev/v2solutions-postgresql-boilerplate.git
     ```
 
 2. Copy the environment variables file:

@@ -14,19 +14,19 @@ interface User extends Document {
 }
 
 const UserSchema = new mongoose.Schema(
-    {
-        name: { type: String },
-        email: { type: String },
-        password: { type: String },
-        country: { type: String },
-        mfaSecret: { type: String },
-        resetPasswordToken: { type: String },
-        resetPasswordExpires: { type: Date },
-        token: { type: String },
-        isVerified: { type: Boolean, default: false },
-        qrCodeUrl: { type: String },
-    },
-    { versionKey: false }
+  {
+    name: { type: String },
+    email: { type: String },
+    password: { type: String },
+    country: { type: String },
+    mfaSecret: { type: String },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
+    token: { type: String },
+    isVerified: { type: Boolean, default: false },
+    qrCodeUrl: { type: String },
+  },
+  { versionKey: false },
 );
 
 export const User = mongoose.model < User > ('users', UserSchema);
